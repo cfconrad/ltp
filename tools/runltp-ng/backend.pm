@@ -94,11 +94,15 @@ sub wait_regexp
 	my $out_fd = $self->{'out_fd'};
 	my @log;
 	my $line;
+	$timeout //= $self->{timeout};
+	my $time_end = time() + $timeout;
 
 	msg("Waiting for regexp '$regexp'\n");
 
 	while (1) {
-		$line = try_readline($self, $timeout);
+		my $time_left = $time_end - time();
+		last unless ($time_left > 0);
+		$line = try_readline($self, $time_left);
 
 		if (!defined($line)) {
 			msg("$self->{'name'}: died!\n");
@@ -327,7 +331,9 @@ my $qemu_params = [
 
 sub qemu_init
 {
-	my %backend;
+	my $defaults = shift;
+	my %backend = %{$defaults};
+
 	$backend{'qemu_params'} = "-enable-kvm -display none -serial stdio";
 	$backend{'qemu_system'} = 'x86_64';
 
@@ -438,7 +444,8 @@ sub ssh_reset_command
 
 sub ssh_init
 {
-	my %backend;
+	my $defaults = shift;
+	my %backend = %{$defaults};
 
 	parse_params(\%backend, "ssh", $ssh_params, @_);
 
@@ -487,7 +494,8 @@ my $sh_params = [
 
 sub sh_init
 {
-	my %backend;
+	my $defaults = shift;
+	my %backend = %{$defaults};
 
 	$backend{'shell'} = "/bin/sh";
 
@@ -510,6 +518,7 @@ my @backends = (
 sub new
 {
 	my ($opts) = @_;
+	my $defaults = { timeout => 600 };
 
 	my @backend_params = quotewords(':', 0, $opts);
 	my $backend_type = shift @backend_params;
@@ -517,7 +526,7 @@ sub new
 	msg("Running test with $backend_type parameters '@backend_params'\n");
 
 	for (@backends) {
-		return $_->[2]->(@backend_params) if ($_->[0] eq $backend_type);
+		return $_->[2]->($defaults, @backend_params) if ($_->[0] eq $backend_type);
 	}
 
 	die("Invalid backend type '$backend_type'\n");
