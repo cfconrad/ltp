@@ -29,6 +29,7 @@ sub json_print_string
 
 	$str =~ s/\\/\\\\/g;
 	$str =~ s/"/\\"/g;
+	$str =~ s/\r?\n/\\n/g;
 
 	print($fh '"' . $str . '"');
 }
@@ -436,6 +437,34 @@ sub writelog
 	writelog_json($log, $fh);
 
 	close($fh);
+}
+
+sub format_json
+{
+	my ($log, $format) = @_;
+
+	return $log if ($format ne 'openqa');
+
+	my $j = {
+		'environment' => $log->{sysinfo},
+		'stats' => $log->{tests}->{stats},
+		'results' => []
+	};
+
+	for my $r (@{$log->{tests}->{results}}) {
+		my $result = $r->{failed} ? 'FAILED' : 'PASS';
+		my $t = {
+			'test_fqn' => $r->{tid},
+			'status' => $result,
+			'test' => {
+				'duration' => $r->{runtime},
+				'result' => $result,
+				'log' => join($/, @{$r->{log}})
+			}
+		};
+		push(@{$j->{results}}, $t);
+	}
+	return $j;
 }
 
 1;

@@ -30,6 +30,7 @@ use results;
 my $backend_opts = "sh";
 my $help = '';
 my $logname = "log";
+my $json_format = '';
 my $sysinfo;
 my $verbose;
 my $list;
@@ -45,6 +46,7 @@ GetOptions("backend=s" => \$backend_opts,
            "run=s" => \$run,
            "exclude=s" => \$exclude,
            "install=s" => \$install,
+           "json-format=s" => \$json_format,
            "verbose" => \$verbose)
 or die("Error in argument parsing!\n");
 
@@ -52,6 +54,7 @@ if ($help) {
 	print("Options\n-------\n\n");
 	print("--help             : Prints this help\n\n");
 	print("--logname=name     : Name for all generated logs\n\n");
+        print("--json-format=name : Format of json log: default,openqa\n\n");
 	print("--sysinfo          : Print system information\n\n");
 	print("--list             : List test groups\n\n");
 	print("--verbose          : Enables verbose mode\n\n");
@@ -95,7 +98,8 @@ if ($run) {
 	$results{'sysinfo'} = utils::collect_sysinfo($backend);
 	my ($stats, $test_results) = utils::run_ltp($backend, $run, $exclude);
 	$results{'tests'} = {'stats' => $stats, 'results' => $test_results};
-	results::writelog(\%results, "$logname.json");
+        my $json = results::format_json(\%results, $json_format);
+	results::writelog($json, "$logname.json");
 	results::writelog_html(\%results, "$logname.html");
 }
 
