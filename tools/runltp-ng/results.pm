@@ -458,12 +458,17 @@ sub format_json
 		my $result = 'unk';
                 $result = 'pass' if ($r->{passed} || $r->{skipped});
                 $result = 'fail' if ($r->{failed} || $r->{broken} || $r->{warnings});
+                my $result_detail = $result;
+                $result_detail = 'skip' if ($r->{skipped});
+                $result_detail = 'warn' if ($r->{warnings});
+                $result_detail = 'broken' if ($r->{broken});
+                $result_detail = 'fail' if ($r->{failed});
 		my $t = {
 			'test_fqn' => $r->{tid},
 			'status' => $result,
 			'test' => {
 				'duration' => $r->{runtime},
-				'result' => $result,
+				'result' => $result_detail,
 				'log' => join($/, @{$r->{log}})
 			}
 		};
