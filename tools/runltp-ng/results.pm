@@ -455,7 +455,9 @@ sub format_json
 	};
 
 	for my $r (@{$log->{tests}->{results}}) {
-		my $result = $r->{failed} ? 'FAILED' : 'PASS';
+		my $result = 'unk';
+                $result = 'pass' if ($r->{passed} || $r->{skipped});
+                $result = 'fail' if ($r->{failed} || $r->{broken} || $r->{warnings});
 		my $t = {
 			'test_fqn' => $r->{tid},
 			'status' => $result,
