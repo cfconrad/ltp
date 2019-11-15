@@ -65,6 +65,11 @@ matrix:
           env: DISTRO=centos:latest
           compiler: gcc
 
+        - os: linux
+          arch: ppc64le
+          compiler: gcc
+          env: DISTRO=debian:testing
+
 before_install:
     - DIR="/usr/src/ltp"
     - printf "FROM $DISTRO\nRUN mkdir -p $DIR\nWORKDIR $DIR\nCOPY . $DIR\n" > Dockerfile
