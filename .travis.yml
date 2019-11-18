@@ -5,83 +5,69 @@ services:
 
 matrix:
     include:
-#        # 32 bit build
-#        - os: linux
-#          env: DISTRO=debian:stable VARIANT=i386
-#          compiler: gcc
-#
-#        # cross compilation builds
-#        - os: linux
-#          env: DISTRO=debian:stable VARIANT=cross-compile.ppc64le TREE="out"
-#          compiler: powerpc64le-linux-gnu-gcc
-#
-#        - os: linux
-#          env: DISTRO=debian:stable VARIANT=cross-compile.aarch64 TREE="out"
-#          compiler: aarch64-linux-gnu-gcc
-#
-#        # build with minimal dependencies
-#        - os: linux
-#          env: DISTRO=debian:stable VARIANT=minimal TREE="out"
-#          compiler: clang
-#
-#        # other builds
-#        - os: linux
-#          env: DISTRO=fedora:latest
-#          compiler: clang
-#
-#        - os: linux
-#          env: DISTRO=centos:6 TREE="out"
-#          compiler: gcc
-#
-#        - os: linux
-#          env: DISTRO=debian:testing
-#          compiler: gcc
-#
-#        - os: linux
-#          env: DISTRO=debian:oldstable
-#          compiler: clang
-#
-#        - os: linux
-#          env: DISTRO=opensuse/leap
-#          compiler: gcc
-#
-#        - os: linux
-#          env: DISTRO=debian:oldstable
-#          compiler: gcc
-#
-#        - os: linux
-#          env: DISTRO=debian:testing
-#          compiler: clang
-#
-#        - os: linux
-#          env: DISTRO=ubuntu:latest TREE="out"
-#          compiler: gcc
-#
-#        - os: linux
-#          env: DISTRO=ubuntu:xenial
-#          compiler: gcc
-#
-#        - os: linux
-#          env: DISTRO=centos:latest
-#          compiler: gcc
-#
+        # 32 bit build
+        - os: linux
+          env: DISTRO=debian:stable VARIANT=i386
+          compiler: gcc
+
+        # cross compilation builds
+        - os: linux
+          env: DISTRO=debian:stable VARIANT=cross-compile.ppc64le TREE="out"
+          compiler: powerpc64le-linux-gnu-gcc
+
+        - os: linux
+          env: DISTRO=debian:stable VARIANT=cross-compile.aarch64 TREE="out"
+          compiler: aarch64-linux-gnu-gcc
+
+        # build with minimal dependencies
+        - os: linux
+          env: DISTRO=debian:stable VARIANT=minimal TREE="out"
+          compiler: clang
+
+        # other builds
+        - os: linux
+          env: DISTRO=fedora:latest
+          compiler: clang
+
+        - os: linux
+          env: DISTRO=centos:6 TREE="out"
+          compiler: gcc
+
+        - os: linux
+          env: DISTRO=debian:testing
+          compiler: gcc
+
+        - os: linux
+          env: DISTRO=debian:oldstable
+          compiler: clang
+
+        - os: linux
+          env: DISTRO=opensuse/leap
+          compiler: gcc
+
+        - os: linux
+          env: DISTRO=debian:oldstable
+          compiler: gcc
+
+        - os: linux
+          env: DISTRO=debian:testing
+          compiler: clang
+
+        - os: linux
+          env: DISTRO=ubuntu:latest TREE="out"
+          compiler: gcc
+
+        - os: linux
+          env: DISTRO=ubuntu:xenial
+          compiler: gcc
+
+        - os: linux
+          env: DISTRO=centos:latest
+          compiler: gcc
+
+        # ARCH: ppc64le
         - os: linux
           arch: ppc64le
-          compiler: gcc
-          env: DISTRO=debian:testing
-
-        - os: linux
-          arch: s390x
-          compiler: gcc
-          env: DISTRO=debian:testing
-
-        - os: linux
-          arch: ppc64le
-          compiler: gcc
-          env: DISTRO=debian:stable
-
-        - os: linux
-          arch: s390x
           compiler: gcc
           env: DISTRO=debian:stable
 
@@ -90,10 +76,11 @@ matrix:
           env: DISTRO=opensuse/leap
           compiler: gcc
 
+        # ARCH: s390x
         - os: linux
           arch: s390x
-          env: DISTRO=opensuse/leap
           compiler: gcc
+          env: DISTRO=debian:stable
 
 before_install:
     - DIR="/usr/src/ltp"
