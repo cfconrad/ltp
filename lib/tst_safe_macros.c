@@ -187,7 +187,8 @@ int safe_chroot(const char *file, const int lineno, const char *path)
 	return rval;
 }
 
-void safe_unshare(const char *file, const int lineno, int flags)
+void safe_unshare(const char *file, const int lineno, const char *flags_str,
+		  int flags)
 {
 	int res;
 
@@ -195,10 +196,10 @@ void safe_unshare(const char *file, const int lineno, int flags)
 	if (res == -1) {
 		if (errno == EINVAL) {
 			tst_brk_(file, lineno, TCONF | TERRNO,
-				 "unshare(%d) unsupported", flags);
+				 "unshare(%s) unsupported", flags_str);
 		} else {
 			tst_brk_(file, lineno, TBROK | TERRNO,
-				 "unshare(%d) failed", flags);
+				 "unshare(%s) failed", flags_str);
 		}
 	}
 }
